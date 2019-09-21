@@ -67,13 +67,13 @@
         $('#pResult').html('请输入用户名和密码');
         $('.modal').modal('show');
       } else {
-        user.login(userName, password, function (result) {
-          console.log(result);
-          if (result.code === 200) {
+        user.login(userName, password, function (res) {
+          console.log(res);
+          if (res.code === 200) {
             // alert('登录成功');
             window.location.href = './index.html';
           } else {
-            // alert(result.msg);
+            // alert(res.msg);
             $('#pResult').html('用户名或密码输入错误');
             $('.modal').modal('show');
           }

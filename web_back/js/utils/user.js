@@ -1,10 +1,11 @@
 // 二阶段封装
 var user = {
   /**
+   * 管理员登录
    * 
-   * @param {*} userName 
-   * @param {*} password 
-   * @param {*} callBack 
+   * @param {*} userName 用户名
+   * @param {*} password 密码
+   * @param {*} callBack 回调函数
    */
   login: function (userName, password, callBack) {
 
@@ -14,7 +15,14 @@ var user = {
     }, function (result) {
       callBack(result);
     })
+  },
+
+  logout: function(callBack){
+    $.post('http://localhost:8000/admin/logout',function(result){
+      callBack(result);
+    })
   }
+
 }
 
 //一阶段封装
