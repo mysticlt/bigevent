@@ -68,7 +68,9 @@
       var password = $('#password').val();
 
       if (userName === '' || password === '') {
-        alert('请输入用户名和密码');
+        // alert('请输入用户名和密码');
+        $('#pResult').html('请输入用户名和密码');
+        $('.modal').modal('show');    
       } else {
         $.post('http://localhost:8000/admin/login', {
           user_name: userName,
@@ -76,7 +78,8 @@
         }, function (res) {
           console.log(res);
           if (res.code === 200){
-            alert('登录成功');
+            // alert('登录成功');
+            window.location.href='./index.html';
           }else{
             alert(res.msg);
           }
