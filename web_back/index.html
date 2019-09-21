@@ -184,6 +184,7 @@
   <script src="./js/bootstrap/js/bootstrap.min.js"></script>
 
   <script>
+    // 用户登出
     $('#btnLogout').click(function () {
       // todos:用模态框来代替
       $('#pResult').html('确定要退出吗？');
@@ -191,14 +192,25 @@
 
       $('#suerExit').click(function () {
         user.logout(function (res) {
-          if (res.code === 200) {         
+          if (res.code === 200) {
             // alert('ye~');
             window.location.href = './login.html';
           }
-        })
+        });
       })
+    });
 
-    })
+
+    // 获取用户信息
+    $(function () {
+      user.getInfo(function (res) {
+        if (res.code === 200) {
+          $('#userName').html(res.data.nickname);
+          $('#userImg').prop('src', res.data.user_pic);
+        }
+      });
+    });
+
 
 
 

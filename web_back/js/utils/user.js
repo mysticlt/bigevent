@@ -9,7 +9,7 @@ var user = {
    */
   login: function (userName, password, callBack) {
 
-    $.post('http://localhost:8000/admin/login', {
+    $.post(urlList.user_login, {
       user_name: userName,
       password: password
     }, function (result) {
@@ -17,13 +17,21 @@ var user = {
     })
   },
 
-  logout: function(callBack){
-    $.post('http://localhost:8000/admin/logout',function(result){
+  logout: function (callBack) {
+    $.post(urlList.user_logout, function (result) {
+      callBack(result);
+    })
+  },
+
+  getInfo: function (callBack) {
+    $.get(urlList.user_info, function (result) {
       callBack(result);
     })
   }
 
 }
+
+
 
 //一阶段封装
 // var user = {
