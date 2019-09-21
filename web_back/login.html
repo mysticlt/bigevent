@@ -58,11 +58,6 @@
   <script src="./js/utils/user.js"></script>
 
   <script>
-    // 思路
-    // 给按钮添加点击事件
-    // 1. 收集用户的信息，进行简单的判断
-    // 2. ajax请求
-    // 3. 根据结果给反馈
     $('#btnLogin').click(function () {
       var userName = $('#userName').val();
       var password = $('#password').val();
@@ -70,22 +65,51 @@
       if (userName === '' || password === '') {
         // alert('请输入用户名和密码');
         $('#pResult').html('请输入用户名和密码');
-        $('.modal').modal('show');    
+        $('.modal').modal('show');
       } else {
-        $.post('http://localhost:8000/admin/login', {
-          user_name: userName,
-          password: password
-        }, function (res) {
-          console.log(res);
-          if (res.code === 200){
+        user.login(userName, password, function (result) {
+          console.log(result);
+          if (result.code === 200) {
             // alert('登录成功');
-            window.location.href='./index.html';
-          }else{
-            alert(res.msg);
+            window.location.href = './index.html';
+          } else {
+            // alert(result.msg);
+            $('#pResult').html('用户名或密码输入错误');
+            $('.modal').modal('show');
           }
         });
       }
     })
+
+
+    // 思路
+    // 给按钮添加点击事件
+    // 1. 收集用户的信息，进行简单的判断
+    // 2. ajax请求
+    // 3. 根据结果给反馈
+    // $('#btnLogin').click(function () {
+    //   var userName = $('#userName').val();
+    //   var password = $('#password').val();
+
+    //   if (userName === '' || password === '') {
+    //     // alert('请输入用户名和密码');
+    //     $('#pResult').html('请输入用户名和密码');
+    //     $('.modal').modal('show');    
+    //   } else {
+    //     $.post('http://localhost:8000/admin/login', {
+    //       user_name: userName,
+    //       password: password
+    //     }, function (res) {
+    //       console.log(res);
+    //       if (res.code === 200){
+    //         // alert('登录成功');
+    //         window.location.href='./index.html';
+    //       }else{
+    //         alert(res.msg);
+    //       }
+    //     })
+    //   }
+    // })
 
 
 
