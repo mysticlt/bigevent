@@ -100,7 +100,7 @@
                             <input type="text" class="form-control" id="category_slug">
                         </div>
 
-                        <div id="divResult" class="alert alert-primary" role="alert">
+                        <div id="divResult" class="alert alert-danger" role="alert">
 
                         </div>
                     </form>
@@ -218,10 +218,9 @@
                             $('#addModal').modal('hide');
                             $('#category_name').val('');
                             $('#category_slug').val('');
-                        } else {
-                            $('#divResult').text(res.msg);
-                            $('#category_name').val('');
-                            $('#category_slug').val('');
+                        } else {                     
+                          
+                            $('#divResult').show().text(res.msg);
                         }
                     })
                 } else {
@@ -236,6 +235,7 @@
                             doQuery();
                         } else {
                             $('#divResult').text(res.msg);
+                            $('#divResult').show();
                         }
                     });
                 }
