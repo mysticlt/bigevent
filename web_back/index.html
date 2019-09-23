@@ -180,6 +180,7 @@
 
   <script src="./js/utils/config.js"></script>
   <script src="./js/utils/user.js"></script>
+  <script src="./js/utils/category.js"></script>
 
   <script src="./js/bootstrap/js/bootstrap.min.js"></script>
 
@@ -211,7 +212,12 @@
       });
     });
 
-
+    // 获取文章分类
+    category.show(function(res){
+      if(res.code==200){
+        console.log(res);
+      }
+    })
 
 
 
@@ -239,6 +245,7 @@
     //     });
     //   }
     // });
+
   </script>
 
 </body>
