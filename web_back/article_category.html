@@ -122,7 +122,7 @@
             <td class="text-center">
                 <a href="javascript:editTr({&quot;id&quot;:&quot;1&quot;,&quot;slug&quot;:&quot;uncategorized&quot;,&quot;name&quot;:&quot;未分类&quot;});"
                     class="btn btn-info btn-xs">编辑</a>
-                <a href="javascript:deleteTr( 1 );" class="btn btn-danger btn-xs">删除</a>
+                <a href="javascript:deleteTr( {{item.id}} );" class="btn btn-danger btn-xs">删除</a>
             </td>
         </tr>
         {{/each}}
@@ -155,9 +155,10 @@
 
     <script src="./js/lib/template-web.js"></script>
 
-    <script>
-        $(function () {
 
+    <script>
+       
+            // 获取文章分类
             function doQuery() {
                 category.show(function (res) {
                     if (res.code === 200) {
@@ -172,8 +173,6 @@
             }
 
             doQuery();
-
-            // 获取文章分类
 
 
             // 新增分类
@@ -200,7 +199,21 @@
                 }
 
             })
-        })
+
+            // 删除
+            function deleteTr(id) {
+                console.log(id);
+                // todo:用模态框改进
+                if (window.confirm('你确定要删除吗？')) {
+                    category.del(id, function (res) {
+                        console.log(res);
+                        if (res.code === 200) {
+                            doQuery();
+                        }
+                    });
+                }
+            }
+       
     </script>
 </body>
 

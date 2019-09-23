@@ -10,4 +10,10 @@ var category = {
             callBack(result);
         })
     },
+
+    del:function(id,callBack){
+        $.post(urlList.category_del,{id,id},function(result){
+            callBack(result);
+        })
+    },
 }
