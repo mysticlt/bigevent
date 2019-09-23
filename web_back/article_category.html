@@ -72,7 +72,8 @@
                 <tfoot>
                     <tr>
                         <td colspan="3" class="text-center">
-                            <a href="#" class="btn btn-success" data-toggle="modal" data-target="#addModal">新增分类</a>
+                            <a href="#" id="btnShowAddModal" class="btn btn-success" data-toggle="modal"
+                                data-target="#addModal">新增分类</a>
                         </td>
                     </tr>
                 </tfoot>
@@ -89,6 +90,7 @@
                 </div>
                 <div class="modal-body">
                     <form>
+                        <input type="hidden" class="form-control" id="category_id" value="">
                         <div class="form-group">
                             <label for="category_name" class="control-label">分类名称:</label>
                             <input type="text" class="form-control" id="category_name">
@@ -120,7 +122,7 @@
             <td>{{item.name}}</td>
             <td>{{item.slug}}</td>
             <td class="text-center">
-                <a href="javascript:editTr({&quot;id&quot;:&quot;1&quot;,&quot;slug&quot;:&quot;uncategorized&quot;,&quot;name&quot;:&quot;未分类&quot;});"
+                <a href='javascript:editTr({"id":"{{item.id}}","slug":"{{item.slug}}","name":"{{item.name}}" });'
                     class="btn btn-info btn-xs">编辑</a>
                 <a href="javascript:deleteTr( {{item.id}} );" class="btn btn-danger btn-xs">删除</a>
             </td>
@@ -144,12 +146,12 @@
         // $('#addModal').modal('hide');
         // });
 
-        $('.category_table').delegate('a', 'click', function () {
-            if ($(this).hasClass('btn-info')) {
-                $('#addModal .modal-title').html('修改分类名称');
-                $('#addModal').modal('show');
-            }
-        })
+        // $('.category_table').delegate('a', 'click', function () {
+        //     if ($(this).hasClass('btn-info')) {
+        //         $('#addModal .modal-title').html('修改分类名称');
+        //         $('#addModal').modal('show');
+        //     }
+        // })
     </script>
 
 
@@ -157,32 +159,58 @@
 
 
     <script>
-       
-            // 获取文章分类
-            function doQuery() {
-                category.show(function (res) {
-                    if (res.code === 200) {
-                        // console.log(res);
+        // 获取文章分类
+        function doQuery() {
+            category.show(function (res) {
+                if (res.code === 200) {
+                    // console.log(res);
 
-                        //取出数据，拼接表格
-                        // var htmlStr = template('tmp', res);
-                        // console.log(htmlStr);
-                        $('#tableContent').html(template('tmp', res));
-                    }
-                });
-            }
+                    //取出数据，拼接表格
+                    // var htmlStr = template('tmp', res);
+                    // console.log(htmlStr);
+                    $('#tableContent').html(template('tmp', res));
+                }
+            });
+        }
 
-            doQuery();
+        doQuery();
 
 
-            // 新增分类
-            $('#model_add').click(function () {
-                var name = $('#category_name').val();
-                var slug = $('#category_slug').val();
+        // 编辑
+        function editTr(obj) {
+            $('#addModal').modal('show');
+            $('#addModal .modal-title').text('修改类型');
+            $('#addModal #model_add').text('保存修改');
+            status = '编辑';
+            // 给文本框赋值
+            $('#category_id').val(obj.id); // 隐藏域
+            $('#category_name').val(obj.name);
+            $('#category_slug').val(obj.slug);
+            $('#divResult').hide();
+        }
 
-                if (name == '' || slug == '') {
-                    $('#divResult').text('名称和别名不能为空');
-                } else {
+
+         // 新增分类
+         $('#btnShowAddModal').click(function () {
+            $('#category_name').val('');
+            $('#category_slug').val('');
+            status = '新增';
+            $('#addModal .modal-title').text('新增分类');
+            $('#addModal #model_add').text('新增');
+            $('#divResult').hide();
+        });
+
+        var status = "新增";
+
+        // 新增分类
+        $('#model_add').click(function () {
+            var name = $('#category_name').val();
+            var slug = $('#category_slug').val();
+
+            if (name == '' || slug == '') {
+                $('#divResult').text('名称和别名不能为空');
+            } else {
+                if (status == "新增") {
                     category.add(name, slug, function (res) {
                         console.log(res);
                         if (res.code === 200) {
@@ -196,24 +224,82 @@
                             $('#category_slug').val('');
                         }
                     })
-                }
-
-            })
-
-            // 删除
-            function deleteTr(id) {
-                console.log(id);
-                // todo:用模态框改进
-                if (window.confirm('你确定要删除吗？')) {
-                    category.del(id, function (res) {
-                        console.log(res);
+                } else {
+                    // 编辑
+                    var id = $('#category_id').val();
+                    console.log()
+                    category.edit(id, name, slug, function (res) {
+                        // console.log(res);
                         if (res.code === 200) {
+
+                            $('#addModal').modal('hide');
                             doQuery();
+                        } else {
+                            $('#divResult').text(res.msg);
                         }
                     });
                 }
             }
+        })
+
+        // 删除
+        function deleteTr(id) {
+            console.log(id);
+            // todo:用模态框改进
+            if (window.confirm('你确定要删除吗？')) {
+                category.del(id, function (res) {
+                    console.log(res);
+                    if (res.code === 200) {
+                        doQuery();
+                    }
+                });
+            }
+        }
+
+
+
        
+
+        // // 新增和编辑共用一个模态框
+        // $('#model_add').click(function () {
+        //     // 用户的数据，进行简单判断
+        //     var name = $('#category_name').val();
+        //     var slug = $('#category_slug').val();
+        //     console.log(name, slug);
+        //     if (name === '' || slug === '') {
+        //         $('#divResult').text('名字和别名不能为空');
+        //     } else {
+        //         if (status === '添加') {
+        //             category.add(name, slug, function (res) {
+        //                 // console.log(res);
+        //                 if (res.code === 200) {
+        //                     $('#divResult').hide();
+        //                     $('#addModal').modal('hide');
+        //                     doQuery();
+        //                 } else {
+        //                     $('#divResult')
+        //                         .show()
+        //                         .text(res.msg);
+        //                 }
+        //             });
+        //         } else {
+        //             // 编辑
+        //             var id = $('#category_id').val();
+        //             category.edit(id, name, slug, function (res) {
+        //                 // console.log(res);
+        //                 if (res.code === 200) {
+        //                     $('#divResult').hide();
+        //                     $('#addModal').modal('hide');
+        //                     doQuery();
+        //                 } else {
+        //                     $('#divResult')
+        //                         .show()
+        //                         .text(res.msg);
+        //                 }
+        //             });
+        //         }
+        //     }
+        // });
     </script>
 </body>
 

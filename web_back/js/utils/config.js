@@ -15,4 +15,5 @@ var urlList = {
     category_show:base_url+'/admin/category_search',
     category_add:base_url+'/admin/category_add',
     category_del:base_url+'/admin/category_delete',
+    category_edit:base_url+'/admin/category_edit',
 };
